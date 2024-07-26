@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import CategoryContainer from './components/CategoryContainer';
+import UserContainer from './components/UserContainer';
+import ProductContainer from './components/ProductContainer';
+import OrderContainer from './components/OrderContainer';
+import BasketContainer from './components/BasketContainer';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+        <div>
+          <nav>
+              <ul>
+                  <li><Link to="/users">Users</Link></li>
+                  <li><Link to="/products">Products</Link></li>
+                  <li><Link to="/categories">Categories</Link></li>
+                  <li><Link to="/orders">Orders</Link></li>
+                  <li><Link to="/baskets">Basket</Link></li>
+              </ul>
+          </nav>
+            <Routes>
+                <Route path='/categories' element={<CategoryContainer/>}/>
+                <Route path='/users' element={<UserContainer/>} />
+                <Route path='/products' element={<ProductContainer/>} />
+                <Route path='/orders' element={<OrderContainer/>} />
+                <Route path='/baskets' element={<BasketContainer/>} />
+            </Routes>
+        </div>
+      </Router>
   );
-}
+};
 
 export default App;
