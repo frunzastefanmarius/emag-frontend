@@ -4,13 +4,24 @@ import PropTypes from 'prop-types';
 const Basket = ({ baskets }) => (
     <div>
         <h1>Basket</h1>
-        <ul>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Product ID</th>
+            </tr>
+            </thead>
+            <tbody>
             {baskets.map(basket => (
-                <li key={basket.id}>
-                    {`User ID: ${basket.idUser}, Product ID: ${basket.idProduct}`}
-                </li>
+                <tr key={basket.id}>
+                    <td>{basket.id}</td>
+                    <td>{basket.idUser}</td>
+                    <td>{basket.idProduct}</td>
+                </tr>
             ))}
-        </ul>
+            </tbody>
+        </table>
     </div>
 );
 

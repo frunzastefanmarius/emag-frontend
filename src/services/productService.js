@@ -7,4 +7,8 @@ export const getProducts = async () => {
     return response.data;
 };
 
+export const deleteProduct = async (id) => {
+    await axios.delete(`${API_URL}/${id}`);
+};
+
 // Additional functions for creating, updating, and deleting products can go here

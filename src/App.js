@@ -5,6 +5,7 @@ import UserContainer from './components/UserContainer';
 import ProductContainer from './components/ProductContainer';
 import OrderContainer from './components/OrderContainer';
 import BasketContainer from './components/BasketContainer';
+import './App.css';
 
 const App = () => {
   return (

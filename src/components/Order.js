@@ -4,13 +4,30 @@ import PropTypes from 'prop-types';
 const Order = ({ orders }) => (
     <div>
         <h1>Orders</h1>
-        <ul>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Creation Date</th>
+                <th>Delivery</th>
+                <th>Payment</th>
+                <th>User ID</th>
+                <th>Product ID</th>
+            </tr>
+            </thead>
+            <tbody>
             {orders.map(order => (
-                <li key={order.id}>
-                    {`Order ID: ${order.id}, User ID: ${order.idUser}, Product ID: ${order.idProduct}, Delivery: ${order.delivery}, Payment: ${order.payment}`}
-                </li>
+                <tr key={order.id}>
+                    <td>{order.id}</td>
+                    <td>{order.creationDateTime}</td>
+                    <td>{order.delivery ? 'Yes' : 'No'}</td>
+                    <td>{order.payment ? 'Yes' : 'No'}</td>
+                    <td>{order.idUser}</td>
+                    <td>{order.idProduct}</td>
+                </tr>
             ))}
-        </ul>
+            </tbody>
+        </table>
     </div>
 );
 

@@ -1,16 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Product = ({ products }) => (
+const Product = ({ products, onDelete }) => (
     <div>
         <h1>Products</h1>
-        <ul>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Category ID</th>
+                <th>User ID</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
             {products.map(product => (
-                <li key={product.id}>
-                    {product.name} - ${product.price}
-                </li>
+                <tr key={product.id}>
+                    <td>{product.id}</td>
+                    <td>{product.name}</td>
+                    <td>{product.description}</td>
+                    <td>${product.price}</td>
+                    <td>{product.idCategory}</td>
+                    <td>{product.idUser}</td>
+                    <td>
+                        <button onClick={() => onDelete(product.id)}>Delete</button>
+                    </td>
+                </tr>
             ))}
-        </ul>
+            </tbody>
+        </table>
     </div>
 );
 
@@ -25,6 +46,7 @@ Product.propTypes = {
             idUser: PropTypes.number.isRequired,
         })
     ).isRequired,
+    onDelete: PropTypes.func.isRequired,
 };
 
 export default Product;

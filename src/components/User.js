@@ -4,11 +4,26 @@ import PropTypes from 'prop-types';
 const User = ({ users }) => (
     <div>
         <h1>Users</h1>
-        <ul>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Active</th>
+                <th>Buyer</th>
+            </tr>
+            </thead>
+            <tbody>
             {users.map(user => (
-                <li key={user.id}>{user.username}</li>
+                <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.username}</td>
+                    <td>{user.isActive ? 'Yes' : 'No'}</td>
+                    <td>{user.isBuyer ? 'Yes' : 'No'}</td>
+                </tr>
             ))}
-        </ul>
+            </tbody>
+        </table>
     </div>
 );
 
@@ -17,7 +32,6 @@ User.propTypes = {
         PropTypes.shape({
             id: PropTypes.number.isRequired,
             username: PropTypes.string.isRequired,
-            password: PropTypes.string.isRequired,
             isActive: PropTypes.bool.isRequired,
             isBuyer: PropTypes.bool.isRequired,
         })
