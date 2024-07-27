@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const Product = ({ products, onDelete }) => (
     <div>
         <h1>Products</h1>
+        <Link to="/products/create">
+            <button>Create New Product</button>
+        </Link>
         <table>
             <thead>
             <tr>
@@ -27,6 +31,9 @@ const Product = ({ products, onDelete }) => (
                     <td>{product.idUser}</td>
                     <td>
                         <button onClick={() => onDelete(product.id)}>Delete</button>
+                        <Link to={`/products/update/${product.id}`}>
+                            <button>Update</button>
+                        </Link>
                     </td>
                 </tr>
             ))}

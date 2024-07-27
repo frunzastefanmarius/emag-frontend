@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-const User = ({ users }) => (
+const User = ({ users, onDelete }) => (
     <div>
         <h1>Users</h1>
+        <Link to="/users/create">
+            <button>Create New User</button>
+        </Link>
         <table>
             <thead>
             <tr>
@@ -11,6 +15,7 @@ const User = ({ users }) => (
                 <th>Username</th>
                 <th>Active</th>
                 <th>Buyer</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -20,6 +25,12 @@ const User = ({ users }) => (
                     <td>{user.username}</td>
                     <td>{user.isActive ? 'Yes' : 'No'}</td>
                     <td>{user.isBuyer ? 'Yes' : 'No'}</td>
+                    <td>
+                        <button onClick={() => onDelete(user.id)}>Delete</button>
+                        <Link to={`/users/update/${user.id}`}>
+                            <button>Update</button>
+                        </Link>
+                    </td>
                 </tr>
             ))}
             </tbody>
@@ -36,6 +47,7 @@ User.propTypes = {
             isBuyer: PropTypes.bool.isRequired,
         })
     ).isRequired,
+    onDelete: PropTypes.func.isRequired,
 };
 
 export default User;

@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { getBaskets } from '../services/basketService';
+import { getBaskets, deleteBasket } from '../services/basketService';
 import Basket from './Basket';
 
 const BasketContainer = () => {
     const [baskets, setBaskets] = useState([]);
 
     useEffect(() => {
-        getBaskets().then(setBaskets).catch(console.error);
+        loadBaskets();
     }, []);
 
-    return <Basket baskets={baskets} />;
+    const loadBaskets = () => {
+        getBaskets().then(setBaskets).catch(console.error);
+    };
+
+    const handleDelete = (id) => {
+        deleteBasket(id)
+            .then(loadBaskets)
+            .catch(console.error);
+    };
+
+    return <Basket baskets={baskets} onDelete={handleDelete} />;
 };
 
 export default BasketContainer;
