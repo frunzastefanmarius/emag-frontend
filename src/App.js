@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {BrowserRouter as Router, Link, Navigate, Route, Routes} from 'react-router-dom';
 import CategoryContainer from './components/CategoryContainer';
 import UserContainer from './components/UserContainer';
 import ProductContainer from './components/ProductContainer';
@@ -17,42 +17,70 @@ import UpdateOrder from "./components/UpdateOrder";
 import AddBasket from "./components/AddBasket";
 import UpdateBasket from "./components/UpdateBasket";
 import Home from "./components/Home";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+
+
+const PrivateRoute = ({ component: Component, ...rest }) => {
+    const isAuthenticated = !!localStorage.getItem('authToken');
+    return isAuthenticated ? <Component {...rest} /> : <Navigate to="/login" />;
+};
+
 
 const App = () => {
-  return (
-      <Router>
-        <div>
-          <nav>
-              <ul>
-                  <li><Link to="/">Home</Link></li>
-                  <li><Link to="/users">Users</Link></li>
-                  <li><Link to="/products">Products</Link></li>
-                  <li><Link to="/categories">Categories</Link></li>
-                  <li><Link to="/orders">Orders</Link></li>
-                  <li><Link to="/baskets">Basket</Link></li>
-              </ul>
-          </nav>
-            <Routes>
-                <Route path='/' exact element={<Home/>} />
-                <Route path='/categories' exact element={<CategoryContainer/>}/>
-                <Route path='/categories/create' element={<AddCategory/>} />
-                <Route path='/categories/update/:id' element={<UpdateCategory/>} />
-                <Route path='/users' exact element={<UserContainer/>} />
-                <Route path='/users/create' element={<AddUser/>} />
-                <Route path='/users/update/:id' element={<UpdateUser/>} />
-                <Route path='/orders' exact element={<OrderContainer/>} />
-                <Route path='/orders/create' element={<AddOrder/>} />
-                <Route path='/orders/update/:id' element={<UpdateOrder/>} />
-                <Route path='/baskets' exact element={<BasketContainer/>} />
-                <Route path='/baskets/create' element={<AddBasket/>} />
-                <Route path='/baskets/update/:id' element={<UpdateBasket/>} />
-                <Route path='/products' exact element={<ProductContainer/>} />
-                <Route path='/products/update/:id' element={<UpdateProduct/>} />
-                <Route path='/products/create' element={<AddProduct/>} />
-            </Routes>
-        </div>
-      </Router>
-  );
+    const [auth, setAuth] = useState(localStorage.getItem('authToken') || '');
+
+    useEffect(() => {
+        localStorage.setItem('authToken', auth);
+    }, [auth]);
+
+    const handleLogout = () => {
+        setAuth('');
+        localStorage.removeItem('authToken');
+        window.location.href = '/login'; // Redirect to login page
+    };
+
+    return (
+        <Router>
+            <div>
+                {auth && (
+                    <nav>
+                        <ul>
+                            <li><Link to="/">Home</Link></li>
+                            <li><Link to="/users">Users</Link></li>
+                            <li><Link to="/products">Products</Link></li>
+                            <li><Link to="/categories">Categories</Link></li>
+                            <li><Link to="/orders">Orders</Link></li>
+                            <li><Link to="/baskets">Basket</Link></li>
+                            <li className="logout-button"><button onClick={handleLogout}>Logout</button></li>
+                        </ul>
+                    </nav>
+                )}
+                <Routes>
+                    <Route path="/login" element={<Login setAuth={setAuth}/>}/>
+                    <Route path="/signup" element={<Signup setAuth={setAuth}/>}/>
+
+
+                    <Route path='/' exact element={<PrivateRoute component={Home}/>} />
+                    <Route path='/categories' exact element={<PrivateRoute component={CategoryContainer}/>}/>
+                    <Route path='/categories/create' element={<PrivateRoute component={AddCategory}/>} />
+                    <Route path='/categories/update/:id' element={<PrivateRoute component={UpdateCategory}/>} />
+                    <Route path='/users' exact element={<PrivateRoute component={UserContainer}/>} />
+                    <Route path='/users/create' element={<PrivateRoute component={AddUser}/>} />
+                    <Route path='/users/update/:id' element={<PrivateRoute component={UpdateUser}/>} />
+                    <Route path='/orders' exact element={<PrivateRoute component={OrderContainer}/>} />
+                    <Route path='/orders/create' element={<PrivateRoute component={AddOrder}/>} />
+                    <Route path='/orders/update/:id' element={<PrivateRoute component={UpdateOrder}/>} />
+                    <Route path='/baskets' exact element={<PrivateRoute component={BasketContainer}/>} />
+                    <Route path='/baskets/create' element={<PrivateRoute component={AddBasket}/>} />
+                    <Route path='/baskets/update/:id' element={<PrivateRoute component={UpdateBasket}/>} />
+                    <Route path='/products' exact element={<PrivateRoute component={ProductContainer}/>} />
+                    <Route path='/products/update/:id' element={<PrivateRoute component={UpdateProduct}/>} />
+                    <Route path='/products/create' element={<PrivateRoute component={AddProduct}/>} />
+                </Routes>
+            </div>
+        </Router>
+    );
 };
 
 export default App;
