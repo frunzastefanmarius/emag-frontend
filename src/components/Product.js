@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const Product = ({ products, onDelete, onCheckboxChange, selectedProducts, onAddToBasket }) => (
+const Product = ({ products, onDelete, onCheckboxChange, selectedProducts, onAddToBasket, isBuyer }) => (
     <div>
         <h1>Products</h1>
-        <Link to="/products/create">
-            <button>Create New Product</button>
-        </Link>
+        {!isBuyer && (
+            <Link to="/products/create">
+                <button>Create New Product</button>
+            </Link>
+        )}
         <table>
             <thead>
             <tr>
@@ -16,7 +18,6 @@ const Product = ({ products, onDelete, onCheckboxChange, selectedProducts, onAdd
                 <th>Description</th>
                 <th>Price</th>
                 <th>Category ID</th>
-                <th>User ID</th>
                 <th>Actions</th>
                 <th>Select</th>
             </tr>
@@ -29,12 +30,15 @@ const Product = ({ products, onDelete, onCheckboxChange, selectedProducts, onAdd
                     <td>{product.description}</td>
                     <td>${product.price}</td>
                     <td>{product.idCategory}</td>
-                    <td>{product.idUser}</td>
                     <td>
-                        <button onClick={() => onDelete(product.id)}>Delete</button>
-                        <Link to={`/products/update/${product.id}`}>
-                            <button>Update</button>
-                        </Link>
+                        {!isBuyer && (
+                            <>
+                                <button onClick={() => onDelete(product.id)}>Delete</button>
+                                <Link to={`/products/update/${product.id}`}>
+                                    <button>Update</button>
+                                </Link>
+                            </>
+                        )}
                     </td>
                     <td>
                         <input
@@ -59,13 +63,13 @@ Product.propTypes = {
             description: PropTypes.string.isRequired,
             price: PropTypes.number.isRequired,
             idCategory: PropTypes.number.isRequired,
-            idUser: PropTypes.number.isRequired,
         })
     ).isRequired,
     onDelete: PropTypes.func.isRequired,
     onCheckboxChange: PropTypes.func.isRequired,
     selectedProducts: PropTypes.arrayOf(PropTypes.number).isRequired,
     onAddToBasket: PropTypes.func.isRequired,
+    isBuyer: PropTypes.bool.isRequired,
 };
 
 export default Product;

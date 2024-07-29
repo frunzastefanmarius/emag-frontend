@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const Category = ({ categories, onDelete }) => (
+const Category = ({ categories, onDelete, isBuyer }) => (
     <div>
         <h1>Categories</h1>
-        <Link to="/categories/create">
-            <button>Create New Category</button>
-        </Link>
+        {!isBuyer && (
+            <Link to="/categories/create">
+                <button>Create New Category</button>
+            </Link>
+        )}
         <table>
             <thead>
             <tr>
@@ -24,10 +26,14 @@ const Category = ({ categories, onDelete }) => (
                     <td>{category.name}</td>
                     <td>{category.description}</td>
                     <td>
-                        <button onClick={() => onDelete(category.id)}>Delete</button>
-                        <Link to={`/categories/update/${category.id}`}>
-                            <button>Update</button>
-                        </Link>
+                        {!isBuyer && (
+                            <>
+                                <button onClick={() => onDelete(category.id)}>Delete</button>
+                                <Link to={`/categories/update/${category.id}`}>
+                                    <button>Update</button>
+                                </Link>
+                            </>
+                        )}
                     </td>
                 </tr>
             ))}
@@ -45,6 +51,7 @@ Category.propTypes = {
         })
     ).isRequired,
     onDelete: PropTypes.func.isRequired,
+    isBuyer: PropTypes.bool.isRequired,
 };
 
 export default Category;

@@ -6,8 +6,14 @@ import Product from './Product';
 const ProductContainer = () => {
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
+    const [isBuyer, setIsBuyer] = useState(false);
 
     useEffect(() => {
+        const auth = localStorage.getItem('authToken');
+        if (auth) {
+            const user = JSON.parse(auth);
+            setIsBuyer(user.isBuyer);
+        }
         loadProducts();
     }, []);
 
@@ -31,9 +37,10 @@ const ProductContainer = () => {
 
     const handleAddToBasket = () => {
         const authToken = localStorage.getItem('authToken');
+        const userId = JSON.parse(authToken).id;
 
         const requests = selectedProducts.map((productId) =>
-            createBasket(parseInt(authToken, 10), productId)
+            createBasket(parseInt(userId, 10), productId)
         );
 
         Promise.all(requests)
@@ -52,6 +59,7 @@ const ProductContainer = () => {
             onCheckboxChange={handleCheckboxChange}
             selectedProducts={selectedProducts}
             onAddToBasket={handleAddToBasket}
+            isBuyer={isBuyer}
         />
     );
 };

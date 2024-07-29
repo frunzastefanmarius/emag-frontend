@@ -15,14 +15,17 @@ const Login = ({ setAuth }) => {
         setCredentials({ ...credentials, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        login(credentials)
-            .then(data => {
-                setAuth(data.id); // Assuming the token is returned in the response
-                setIsLoggedIn(true);
-            })
-            .catch(console.error);
+        try {
+            const data = await login(credentials);
+            const user = JSON.stringify(data);
+            localStorage.setItem('authToken', user); // Store user details in authToken
+            setAuth(user);
+            setIsLoggedIn(true);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     useEffect(() => {
@@ -34,7 +37,7 @@ const Login = ({ setAuth }) => {
     return (
         <div className="auth-container">
             <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="auth-form">
                 <label>
                     Username:
                     <input type="text" name="username" value={credentials.username} onChange={handleChange} required/>

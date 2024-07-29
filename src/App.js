@@ -21,17 +21,22 @@ import Signup from "./components/Signup";
 import Login from "./components/Login";
 
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({component: Component, ...rest}) => {
     const isAuthenticated = !!localStorage.getItem('authToken');
-    return isAuthenticated ? <Component {...rest} /> : <Navigate to="/login" />;
+    return isAuthenticated ? <Component {...rest} /> : <Navigate to="/login"/>;
 };
 
 
 const App = () => {
     const [auth, setAuth] = useState(localStorage.getItem('authToken') || '');
+    const [isBuyer, setIsBuyer] = useState(false);
 
     useEffect(() => {
-        localStorage.setItem('authToken', auth);
+        if (auth) {
+            const user = JSON.parse(auth);
+            setIsBuyer(user.isBuyer);
+        }
+        // localStorage.setItem('authToken', auth);
     }, [auth]);
 
     const handleLogout = () => {
@@ -47,12 +52,14 @@ const App = () => {
                     <nav>
                         <ul>
                             <li><Link to="/">Home</Link></li>
-                            <li><Link to="/users">Users</Link></li>
+                            {!isBuyer && <li><Link to="/users">Users</Link></li>}
                             <li><Link to="/products">Products</Link></li>
                             <li><Link to="/categories">Categories</Link></li>
                             <li><Link to="/orders">Orders</Link></li>
                             <li><Link to="/baskets">Basket</Link></li>
-                            <li className="logout-button"><button onClick={handleLogout}>Logout</button></li>
+                            <li className="logout-button">
+                                <button onClick={handleLogout}>Logout</button>
+                            </li>
                         </ul>
                     </nav>
                 )}
@@ -61,22 +68,22 @@ const App = () => {
                     <Route path="/signup" element={<Signup setAuth={setAuth}/>}/>
 
 
-                    <Route path='/' exact element={<PrivateRoute component={Home}/>} />
+                    <Route path='/' exact element={<PrivateRoute component={Home}/>}/>
                     <Route path='/categories' exact element={<PrivateRoute component={CategoryContainer}/>}/>
-                    <Route path='/categories/create' element={<PrivateRoute component={AddCategory}/>} />
-                    <Route path='/categories/update/:id' element={<PrivateRoute component={UpdateCategory}/>} />
-                    <Route path='/users' exact element={<PrivateRoute component={UserContainer}/>} />
-                    <Route path='/users/create' element={<PrivateRoute component={AddUser}/>} />
-                    <Route path='/users/update/:id' element={<PrivateRoute component={UpdateUser}/>} />
-                    <Route path='/orders' exact element={<PrivateRoute component={OrderContainer}/>} />
-                    <Route path='/orders/create' element={<PrivateRoute component={AddOrder}/>} />
-                    <Route path='/orders/update/:id' element={<PrivateRoute component={UpdateOrder}/>} />
-                    <Route path='/baskets' exact element={<PrivateRoute component={BasketContainer}/>} />
-                    <Route path='/baskets/create' element={<PrivateRoute component={AddBasket}/>} />
-                    <Route path='/baskets/update/:id' element={<PrivateRoute component={UpdateBasket}/>} />
-                    <Route path='/products' exact element={<PrivateRoute component={ProductContainer}/>} />
-                    <Route path='/products/update/:id' element={<PrivateRoute component={UpdateProduct}/>} />
-                    <Route path='/products/create' element={<PrivateRoute component={AddProduct}/>} />
+                    {!isBuyer && <Route path='/categories/create' element={<PrivateRoute component={AddCategory}/>}/>}
+                    {!isBuyer && <Route path='/categories/update/:id' element={<PrivateRoute component={UpdateCategory}/>}/>}
+                    {!isBuyer && <Route path='/users' exact element={<PrivateRoute component={UserContainer}/>}/>}
+                    <Route path='/users/create' element={<PrivateRoute component={AddUser}/>}/>
+                    <Route path='/users/update/:id' element={<PrivateRoute component={UpdateUser}/>}/>
+                    <Route path='/orders' exact element={<PrivateRoute component={OrderContainer}/>}/>
+                    <Route path='/orders/create' element={<PrivateRoute component={AddOrder}/>}/>
+                    <Route path='/orders/update/:id' element={<PrivateRoute component={UpdateOrder}/>}/>
+                    <Route path='/baskets' exact element={<PrivateRoute component={BasketContainer}/>}/>
+                    {!isBuyer && <Route path='/baskets/create' element={<PrivateRoute component={AddBasket}/>}/>}
+                    <Route path='/baskets/update/:id' element={<PrivateRoute component={UpdateBasket}/>}/>
+                    <Route path='/products' exact element={<PrivateRoute component={ProductContainer}/>}/>
+                    {!isBuyer && <Route path='/products/update/:id' element={<PrivateRoute component={UpdateProduct}/>}/>}
+                    {!isBuyer && <Route path='/products/create' element={<PrivateRoute component={AddProduct}/>}/>}
                 </Routes>
             </div>
         </Router>

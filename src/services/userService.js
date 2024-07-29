@@ -19,4 +19,8 @@ export const createUser = async (newUser) => {
     await axios.post(API_URL, newUser);
 };
 
+export const getUserById = (id) => {
+    return axios.get(`${API_URL}/${id}`).then(response => response.data);
+};
+
 // Additional functions for creating, updating, and deleting users can go here

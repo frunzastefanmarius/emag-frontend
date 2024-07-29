@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const Order = ({ orders, onDelete }) => (
+const Order = ({ orders, onDelete, isBuyer }) => (
     <div>
         <h1>Orders</h1>
         <Link to="/orders/create">
@@ -54,6 +54,7 @@ Order.propTypes = {
         })
     ).isRequired,
     onDelete: PropTypes.func.isRequired,
+    isBuyer: PropTypes.bool.isRequired,
 };
 
 export default Order;

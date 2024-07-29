@@ -16,14 +16,17 @@ const Signup = ({ setAuth }) => {
         setUserData({ ...userData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        signup(userData)
-            .then(data => {
-                setAuth(data.id); // Assuming the token is returned in the response
-                setIsSignedUp(true);
-            })
-            .catch(console.error);
+        try {
+            const data = await signup(userData);
+            const user = JSON.stringify(data.user);
+            localStorage.setItem('authToken', user); // Store user details in authToken
+            setAuth(user);
+            setIsSignedUp(true);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     useEffect(() => {
@@ -35,7 +38,7 @@ const Signup = ({ setAuth }) => {
     return (
         <div className="auth-container">
             <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="auth-form">
                 <label>
                     Username:
                     <input type="text" name="username" value={userData.username} onChange={handleChange} required/>
