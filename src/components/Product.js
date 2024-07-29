@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const Product = ({ products, onDelete }) => (
+const Product = ({ products, onDelete, onCheckboxChange, selectedProducts, onAddToBasket }) => (
     <div>
         <h1>Products</h1>
         <Link to="/products/create">
@@ -18,6 +18,7 @@ const Product = ({ products, onDelete }) => (
                 <th>Category ID</th>
                 <th>User ID</th>
                 <th>Actions</th>
+                <th>Select</th>
             </tr>
             </thead>
             <tbody>
@@ -35,10 +36,18 @@ const Product = ({ products, onDelete }) => (
                             <button>Update</button>
                         </Link>
                     </td>
+                    <td>
+                        <input
+                            type="checkbox"
+                            checked={selectedProducts.includes(product.id)}
+                            onChange={() => onCheckboxChange(product.id)}
+                        />
+                    </td>
                 </tr>
             ))}
             </tbody>
         </table>
+        <button onClick={onAddToBasket}>Add to Basket</button>
     </div>
 );
 
@@ -54,6 +63,9 @@ Product.propTypes = {
         })
     ).isRequired,
     onDelete: PropTypes.func.isRequired,
+    onCheckboxChange: PropTypes.func.isRequired,
+    selectedProducts: PropTypes.arrayOf(PropTypes.number).isRequired,
+    onAddToBasket: PropTypes.func.isRequired,
 };
 
 export default Product;

@@ -16,7 +16,15 @@ export const updateBasket = async (id, updatedBasket) => {
     await axios.put(`${API_URL}/${id}`, updatedBasket);
 };
 
-export const createBasket = async (newBasket) => {
-    await axios.post(API_URL, newBasket);
+// export const createBasket = async (newBasket) => {
+//     await axios.post(API_URL, newBasket);
+// };
+
+export const createBasket = (userId, productId) => {
+    return axios.post(`${API_URL}`, {
+        idUser: userId,
+        idProduct: productId,
+    });
 };
+
 // Additional functions for creating, updating, and deleting baskets can go here
